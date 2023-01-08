@@ -18,7 +18,7 @@ Let's get started!
 
 First, I configured the two machines that I'll be using for this project in VMWare - the Ubuntu server, and a Kali VM to perform the attacks. Both machines are fully up to date (as of the time of this writing)
 
-![Hello World!](assets/images/20230104170912.png)
+![Hello World!](../assets/images/20230104170912.png)
 ![Kali Release](assets/images/20230104180711.png)
 
 Let's confirm that the machines are able to communicate with each other.
