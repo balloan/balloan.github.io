@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Hack the Box Write-ups
-nav_order: 3
+title: HacktheBox Write-ups
+nav_order: 2
 has_children: true
 ---
 
