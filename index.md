@@ -1,5 +1,5 @@
 ---
-title: Projects & More
+title: Home
 layout: home
 ---
 
