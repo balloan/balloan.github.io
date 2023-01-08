@@ -2,6 +2,9 @@ title: Writeups & Projects
 description: Documentation for various things that I work on.
 theme: just-the-docs
 
+# Color scheme supports "light" (default) and "dark"
+color_scheme: dark
+
+
 url: https://balloan.github.io
 
-color_scheme: dark
