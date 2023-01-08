@@ -2,6 +2,12 @@
 title: Home
 layout: home
 ---
+---
+layout: default
+title: TryHackMe Write-ups
+nav_order: 2
+has_children: true
+---
 
 # Projects
 
