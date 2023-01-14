@@ -209,14 +209,13 @@ Lots of results; let's break this down.
 
 http://10.10.87.42/joomla/installation/ - PLEASE REMEMBER TO COMPLETELY REMOVE THE INSTALLATION FOLDER.
 You will not be able to proceed beyond this point until the "installation" folder has been removed. This is a security feature of Joomla!
-- We like security features. The installation folder has not been removed - we'll dig into this later if we find nothing.
 
-http://10.10.87.42/joomla/administrator/
-- Admin login page -> If we find credentials somewhere, this looks promising.
+We like security features. The installation folder has not been removed - we'll dig into this later if we find nothing.
 
-http://10.10.87.42/joomla/build/
-- http://10.10.87.42/joomla/build/jenkins/ - unit-tests.sh & docker-compose.yml -> Credentials for MySQL / postgres?
-- We can't use these credentials anywhere, and there's a chance this is default for a Joomla deployment - maybe if there's an internal database service later on this could be helpful.
+http://10.10.87.42/joomla/administrator/  -> Admin login page -> If we find credentials somewhere, this looks promising.
+
+http://10.10.87.42/joomla/build/jenkins/ - unit-tests.sh & docker-compose.yml -> Credentials for MySQL / postgres?
+We can't use these credentials anywhere, and there's a chance this is default for a Joomla deployment - maybe if there's an internal database service later on this could be helpful.
 
 ```
 cat unit-tests.sh
@@ -234,10 +233,11 @@ environment:
 ```
 
 http://10.10.87.42/joomla/_files/
-- Page containing just the string: 'VjJodmNITnBaU0JrWVdsemVRbz0K' with the title "Woops"
-- It was double encoded with Base64 - I used CyberChef to decode it. 
-- Decoded = Whopsie daisy
-- This room creator clearly likes leaving rabbit holes everywhere.
+
+This page just contained the string: 'VjJodmNITnBaU0JrWVdsemVRbz0K' with the title "Woops"
+
+It was double encoded with Base64 - I used CyberChef to decode it. The decoded value was "Whopsie daisy"
+This room creator clearly likes leaving rabbit holes everywhere.
 
 * * *
 
@@ -263,7 +263,6 @@ gobuster dir -u http://10.10.161.218/joomla/index.php -w /usr/share/wordlists/di
 Nothing at all interesting in these.
 
 I'm going to try enumerating the joomla subdirectories again, with a different wordlists + extensions, as I haven't found a clear direction to attack yet.
-
 The joomla portion seemed the most promising overall so far, and also had rabbit holes like `_files`
 
 ```
@@ -356,27 +355,26 @@ gobuster dir -u $IP/joomla -w /usr/share/wordlists/dirb/common.txt -t 128 -x php
 
 That wordlist got me substantially more information.
 
-http://10.10.86.86/joomla/_archive/
-- Mnope, nothin to see.
+http://10.10.86.86/joomla/_archive/ -> Page just said "Mnope, nothin to see."
 
 http://10.10.86.86/joomla/_database/
-- Lwuv oguukpi ctqwpf.
-- I just used my script with various shift keys because it looked like a shift cipher again. Nothing helpful, again.
+
+Lwuv oguukpi ctqwpf.
+I just used my script with various shift keys because it looked like a shift cipher again. Nothing helpful, again.
 
 ```
 python3 SimpleCiphers.py -c caesar -m d -k 24 "Lwuv oguukpi ctqwpf."
 Just messing around.
 ```
 
-http://10.10.86.86/joomla/_test/
-- This actually looks very interesting - sar2html
+http://10.10.86.86/joomla/_test/ _> This actually looks very interesting - sar2html
 
 When I googled it, I located the following exploit:  https://www.exploit-db.com/exploits/47204
-
 We like to see RCE, and it seems easy enough to abuse.
 
 In order to exploit this, it seems like we can just add commands in the URL, ie "http://10.10.86.86/joomla/_test/index.php?plot=;whoami"
-- Under the select host section we see `www-data` -> Confirmed Vulnerable.
+
+Under the select host section we see `www-data` -> Confirmed Vulnerable.
 
 There are quite a few directories above that I didn't investigate - I'll head back to them later if this exploit doesn't achieve my goals.
 
