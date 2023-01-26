@@ -1,7 +1,7 @@
 ---
 layout: default
 title: SSH Overview
-parent: Projects
+parent: Ubuntu Project
 ---
 
 # SSH - Overview & Initial Install
