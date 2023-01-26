@@ -14,7 +14,7 @@ Afterwards, I’ll begin hardening the SSH service by looking at solutions such 
 
 Example bruteforce of a user with a weak password
 
-![Hydra Attack](../assets/images/ubuntuproject/8.png)
+![Hydra Attack](../../assets/images/ubuntuproject/8.png)
 
 Obviously, the above example is using an extremely weak password. Just for fun, let’s generate a quick mutated password list based on the word “Microsoft” (pretend that Victim worked there for this example). I used a couple of default word lists, and one custom one I had saved. I quickly generated 480 unique passwords that are various permutations of Microsoft. 
 
@@ -29,7 +29,7 @@ wc -l passwords.txt
 480 passwords.txt
 ```
 
-![Hydra Attack](../assets/images/ubuntuproject/9.png)
+![Hydra Attack](../../assets/images/ubuntuproject/9.png)
 
 The password `Micr0s0ft2022!` is 14 characters long, with a mix of uppercase, lowercase, symbols and numbers. Most password guidelines would consider that to be a very strong password, but the existence of a dictionary word makes it weak. People tend to be lazy about their passwords; permutations of their company name plus easy to remember symbols and numbers aren’t exactly rare.
 
