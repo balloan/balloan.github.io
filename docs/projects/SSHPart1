@@ -29,7 +29,7 @@ Right away, it’s extremely apparent that this service is valuable to attackers
 
 We'll begin by installing the SSH service.
 
-```bash
+```
 sudo apt install openssh-server
 
 systemctl status ssh
@@ -38,7 +38,7 @@ ssh.service - OpenBSD Secure Shell server
      Active: active (running) since Sun 2023-01-15 01:54:17 UTC; 1min 19s ago
 ```
 
-```bash
+```
 ss -tnlp
 
 State            Recv-Q           Send-Q                     Local Address:Port                       Peer Address:Port           Process           
@@ -69,7 +69,7 @@ We can also check the allowed authentication methods with Nmap.
 
 We can also use netcat to interact with port 22 on the Ubuntu server and grab the banner.
 
-```bash
+```
 nc 10.0.0.10 22
 SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.1
 ```
