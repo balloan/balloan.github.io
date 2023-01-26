@@ -114,3 +114,107 @@ Let’s verify that the server will no longer allow me to connect with a passwor
 ![Permission Denied](../../assets/images/ubuntuproject/12.png)
 
 ![Nmap Scan](../../assets/images/ubuntuproject/13.png)
+
+* * * 
+
+## Additional Security Considerations
+
+The SSH service is now significantly more secure. As long as we keep our private key safe, nobody should be able to access the server. I recommend putting a password on the private key as well - I didn’t here, as the Ubuntu server is not exposed to the internet. Keep in mind that the same password considerations will apply to the private key; if somebody has access to it they’ll be able to attempt to crack the password offline - a very weak password can be cracked in seconds.
+
+It’s also possible to set up multi-factor authentication for SSH by using something like Google Authenticator and a smartphone to generate a time-based, random code. This would make the server have another layer of defense, and be much harder to compromise. I’m not going to configure it here, but there are plenty of guides out there.
+
+Another possibility is to change SSH from its default port of 22. This would be security through obscurity - not a very good method, and doesn’t really do anything to stop a targeted attack, but I figured I’d mention it. 
+
+Finally, we could only allow access to SSH for certain users by adding a line to the SSH config file - this could be useful depending on the server and its use case.
+
+* * *
+
+## Detecting SSH Attacks
+
+By default, we can see attempts to authenticate to SSH in `/var/log/auth.log`. This makes it very easy to spot dictionary attacks, password spraying and other forms of password attacks.
+
+```
+Jan 22 00:23:59 ubuntu-server sshd[1199]: Failed password for victim from 10.0.0.130 port 32798 ssh2
+Jan 22 00:23:59 ubuntu-server sshd[1202]: Failed password for victim from 10.0.0.130 port 32832 ssh2
+Jan 22 00:23:59 ubuntu-server sshd[1208]: Failed password for victim from 10.0.0.130 port 32898 ssh2
+Jan 22 00:23:59 ubuntu-server sshd[1203]: Failed password for victim from 10.0.0.130 port 32840 ssh2
+Jan 22 00:23:59 ubuntu-server sshd[1212]: Failed password for victim from 10.0.0.130 port 32930 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1211]: Failed password for victim from 10.0.0.130 port 32916 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1200]: Failed password for victim from 10.0.0.130 port 32810 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1201]: Failed password for victim from 10.0.0.130 port 32822 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1205]: Failed password for victim from 10.0.0.130 port 32860 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1214]: Failed password for victim from 10.0.0.130 port 32950 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1207]: Failed password for victim from 10.0.0.130 port 32888 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1209]: Failed password for victim from 10.0.0.130 port 32902 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1204]: Failed password for victim from 10.0.0.130 port 32850 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1210]: Failed password for victim from 10.0.0.130 port 32906 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1206]: Failed password for victim from 10.0.0.130 port 32872 ssh2
+Jan 22 00:24:00 ubuntu-server sshd[1213]: Failed password for victim from 10.0.0.130 port 32934 ssh2
+Jan 22 00:24:01 ubuntu-server sshd[1199]: error: maximum authentication attempts exceeded for victim from 10.0.0.130 port 32798 ssh2 [preauth]
+```
+
+And so on, for many pages - it’s pretty easy to see the brute force attempts in the log.
+
+We can also check the fail2ban log at `/var/log/fail2ban.log`
+
+```
+[2076]: INFO    [sshd] Found 10.0.0.130 - 2023-01-22 23:26:07
+
+2023-01-22 23:26:07,444 fail2ban.filter         [2076]: INFO    [sshd] Found 10.0.0.130 - 2023-01-22 23:26:07
+2023-01-22 23:26:07,444 fail2ban.filter         [2076]: INFO    [sshd] Found 10.0.0.130 - 2023-01-22 23:26:07
+2023-01-22 23:26:07,444 fail2ban.filter         [2076]: INFO    [sshd] Found 10.0.0.130 - 2023-01-22 23:26:07
+2023-01-22 23:26:07,444 fail2ban.filter         [2076]: INFO    [sshd] Found 10.0.0.130 - 2023-01-22 23:26:07
+2023-01-22 23:26:07,444 fail2ban.filter         [2076]: INFO    [sshd] Found 10.0.0.130 - 2023-01-22 23:26:07
+2023-01-22 23:26:07,674 fail2ban.actions        [2076]: NOTICE  [sshd] Ban 10.0.0.130
+
+.......................
+
+2023-01-22 23:27:08,269 fail2ban.actions        [2076]: NOTICE  [sshd] Unban 10.0.0.130
+```
+
+* * *
+
+## Practical Example - Cloud Server
+
+Just for fun, I deployed a Ubuntu server on Google Cloud to monitor SSH activity. It’s interesting seeing all of the attempts that take place on any server that’s exposed to the internet.
+
+Almost immediately, my log files showed attempts to connect to my server via SSH. This shows how important it is to have secure passwords at the very least, but ideally only allow key-based authentication. There are *tons* of machines constantly scanning the internet for vulnerable servers - don’t be one of them.
+
+```
+less /var/log/auth.log
+
+Jan 15 21:33:26 instance-1 sshd[8451]: Invalid user vagrant from <SNIP> port 50664
+Jan 15 21:33:26 instance-1 sshd[8453]: Invalid user telnet from <SNIP> port 61791
+Jan 15 21:33:26 instance-1 sshd[8453]: Connection reset by invalid user telnet <SNIP> port 61791 [preauth]
+Jan 15 21:33:27 instance-1 sshd[8451]: Connection reset by invalid user vagrant <SNIP> port 50664 [preauth]
+Jan 15 21:34:15 instance-1 sshd[8465]: Received disconnect from <SNIP> port 43840:11: Bye Bye [preauth]
+Jan 15 21:34:15 instance-1 sshd[8465]: Disconnected from authenticating user root <SNIP> port 43840 [preauth]
+Jan 15 21:40:32 instance-1 sshd[8516]: Received disconnect from <SNIP> port 38932:11: Bye Bye [preauth]
+Jan 15 21:40:32 instance-1 sshd[8516]: Disconnected from authenticating user root <SNIP> port 38932 [preauth]
+...
+<SNIP>
+```
+
+I did a lookup of one of the IP addresses in question through Cisco’s Talos Intelligence reputation center. The IP is from South Korea, it’s listed as untrusted, and it’s currently on the Talos Security Intelligence Block List - understandably!
+
+I also searched the IP addresses on VirusTotal, and they were flagged as malicious. One of them had a community member comment that one of the IP addresses in question was conducting SSH bruteforcing attacks.
+
+![Talos Security Intelligence Block List](../../assets/images/ubuntuproject/14.png)
+
+I was curious about all of the usernames that were regularly targeted, so I figured I’d leave the server running for a week and see. The majority of the authentication attempts were for “root”, so I exclusively filtered for invalid usernames on my server.
+
+```
+grep 'sshd.*Invalid user' /var/log/auth.log | cut -d ' ' -f 8 | sort -u > usernames.txt
+
+wc -l usernames.txt 
+492 usernames.txt
+
+sed ':a;N;$!ba;s/\n/,/g' usernames.txt | cat
+
+Admin,CISINFO,ONTUSER,aaron,adam,adi,aditya,adm,admin,admin1,admin2,adminweb,adsl,alan,alarm,albert123,alberto,alcatel,alexandre,alfresco,ali,allan,alpha,alumno,amir,amit,ana,andrew,andy,angel,angelica,anil,anjana,ansibleuser,anto,antoine,antonio,apacher,api,appldev,applprod,arkserver,asap,asc,auto,avi,backend,bdos,benjamin,bhx,bigdata,bigipuser3,billy,blog,bluesky,bml,bni,bob,boss,bot,bot2,bpuser,brian,brother,build,bwadmin,cam,camera,camtest,carlos,cas,cashier,cc,centos,cgpexpert,chengfang,chenyd,cipensiamonoicasa,cloud,common,compras,confluence,consulta,control,copia,copias,core,cpd,cqj,cs,csgosrv,cvsuser,cxy,czc,danhui,daniela,danilo,data,david,db_user,dd,ddos,debianuser,debug,default,demo1,deploy,desarrollo,dev,dev1,devopsuser,diego,disk,divya,django,dkhcdndn,dlxuser,dmdba,dms,dnsekakf2$$,docker,dockeradmin,dolphinscheduler,dong,dynamic,ec2-user,edi,eduardo,edwin,ela,els,elsearch,emcali,ems,enrique,esunny,eugene,export,factura,fastuser,felix,fengchao,finn,fiscal,foobar,formation,foundry,frappe,front,ftp,ftp1,ftp_admin,ftp_guest,ftp_test,ftpadmin,fv,gandalf,git,gitlab-runner,gituser,gmod,grid,guest,guest-pkxhox,gustavo,hadmin,hadoop,haohao,harry,hejc,hello,hh,hive,hj,hl,home,hotline,hs,hsi,httpadmin,huawei,huzhengjian,hz,hzk,igor,import,incoming,infa,informix,inspir,int,iwan,jack,jacob,jake,jarservice,jay,jboss,jenkins,jeremy,jimmy,jon,jonathan,jordan,jorge,joyce,juan,julien,jupyter,jxzhang,k,kadmin,kafka,kali,kbe,keh,kevin,khs,kibana,king,kms,knock,koha,kuba,kube,l4d2server,lab,leonardo,libuuid,lighthouse,lisa,liu,liubin,liumeina,liuyuyao,logic,lokesh,lorenz,louis,lty,lukas,lwq,lxc,lyh,lzn,m,machao,magento,maint,maintain,manager,mapr,mapred,maria,mark,marta,mashuai,matt,max,mc,mcserver,media,miguel,miles,miner,minera,miniconda,minikube,mk,mm,money,mongo,mongod,mongodb,moodle,mos,nas,nathan,new,nginxuser,nicola,notes,novo,ocean,one,opc,openbravo,openhabian,openstack,operador,operator,ora,oracle,oracle32,oraprod,osboxes,oscar,oscommerce,ossadm,otrs,owncloud,p1,pacs,parisa,pasha,patrice,patricia,patrick,paulo,pedro,peertube,pentaho,phil,phion,pi,pos,postgre,postgres,pp,ppp,princess,printer,prova,prueba,ps,public,python,pzserver,qianqian,quan,query,r,ram,rancher,reach,red,rich,rob,robert,roberto,rodrigo,rpm,rundeck,runner,rust,s1,sFTPUser,sa,sac,safa,sales,sales1,sam,sama,samba,sambauser,sambit,sample,samuel,sandra,sara,scj,sergey,sftp,share,shiny,shoutcast,site,slave,sonar,sonarqube,sonarr,songsong,soporte,sp,spark,speech-dispatcher,spider,spy,starbound,steam,stream,student3,student5,students,sun,super,support,sybase,sysbio,szy,tata,teacher,teamspeak3,tele,telnet,tempuser,test,test01,test6,testadmin,thomas,ti,tibero,tidb,tigergraph,tim,tiptop,titan,tmax,tomas,tommy,toor,torrent,tq,transfer,transmission,ts3,ts3srv,tunnel,two,ubnt,ubuntu,uftp,ukschool,update,upload,user,user1,user11,user3,user4,userftp,username,usr,usuario2,utente,uvr,vadmin,vagrant,venkat,ventas,vhserver,victor,vijay,vincent,vishnu,vitaly,vlad,vmail,vmware,vpn,vpnadmin,vps,vyatta,walter,wanghan,wasadm,webadmin,webdev,weblogic,webmaster01,webuser,wenxian,wh,wildfly,wk,wocloud,work,wsuser,www,wyc,x,xh,xiaoshu,xj,xtest,xy,yaozw,yjq,yuan,zd,zengyuanqi,zhang,zhc,zjq,zk,zl,zr,zsw,zte,zyfwp
+
+```
+
+I was genuinely surprised by the variety of names that tried to authenticate to the server. Some, like `admin`, `apache`, `vagrant`, and various DB accounts were expected. Others like `l4d2server`, `cashier`, `gmod`, `speech-dispatcher` and many others caught me off guard.
+
+As you can see from above, there’s a ridiculous number of bots searching for vulnerable servers. Don’t be one of them.
