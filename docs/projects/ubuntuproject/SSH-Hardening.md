@@ -35,12 +35,11 @@ The password `Micr0s0ft2022!` is 14 characters long, with a mix of uppercase, lo
 It's important to note that there are *many* tools out there to generate password lists. You can use hashcat, as I did here, tools such as CUPP (Common User Passwords Profiler), Mentalist and more. It's extremely easy to make long lists that add various levels of complexity to a password, appending common numbers to the end, etc. Truly random passwords are very difficult to guess. Passwords that are based upon words that can be linked to an individual (company name, spouse name, pet name, sports teams, anything posted about frequently on social media) are significantly more vulnerable, even if it's a seemingly strong password.
 
 * * *
-
-## Configuring Fail2Ban
+# Hardening SSH
 
 The above attack only works if I'm allowed to attempt to authenticate as many times as I like - let's fix that.
 
-Fail2Ban is a program that scans log files such as `/var/log/auth.log` and blocks IP addresses who have too many failed authentications (ie bruteforce attacks). It’s a good way to harden services and discourage bruteforce attacks, while not sacrificing convenience. The default ban time is only 10 minutes, you can adjust the timeout to a value that is appropriate.
+`Fail2Ban` is a program that scans log files such as `/var/log/auth.log` and blocks IP addresses who have too many failed authentications (ie bruteforce attacks). It’s a good way to harden services and discourage bruteforce attacks, while not sacrificing convenience. The default ban time is only 10 minutes, you can adjust the timeout to a value that is appropriate.
 
 The default installation will enable fail2ban for our SSH service. I’m not going to do any in-depth configuration here; it’s more just to show that this exists, and is a good option to help harden the server.
 

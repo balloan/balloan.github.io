@@ -23,7 +23,9 @@ The client needs to authenticate to the server to connect - the most common meth
 OpenSSH also supports a variety of other methods (ie Kerberos integration, challenge/response for PAM) but for the sake of simplicity I won’t be covering those.
 
 Right away, it’s extremely apparent that this service is valuable to attackers. Gaining access through SSH is gaining a shell, allowing a great deal of access in the system. It’s a service that allows direct access, and it can be publicly exposed to the internet as a whole; we need to ensure it is secure.
+
 * * *
+
 ## Installation
 
 We'll begin by installing the SSH service.
