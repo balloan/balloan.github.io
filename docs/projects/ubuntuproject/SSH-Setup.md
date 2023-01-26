@@ -24,7 +24,7 @@ OpenSSH also supports a variety of other methods (ie Kerberos integration, chall
 
 Right away, it’s extremely apparent that this service is valuable to attackers. Gaining access through SSH is gaining a shell, allowing a great deal of access in the system. It’s a service that allows direct access, and it can be publicly exposed to the internet as a whole; we need to ensure it is secure.
 
-# Installation
+## Installation
 
 We'll begin by installing the SSH service.
 
@@ -52,7 +52,7 @@ The SSH server is now running, and the server is listening on port 22.
 
 And, as expected, we were able to connect to the server via SSH. 
 
-# Initial Observations
+## Initial Observations
 
 The default settings of a newly installed SSH server allow us to authenticate with a password - we’ll explore why this can be a problem, as well as configuring and hardening the SSH server shortly. 
 
@@ -73,7 +73,7 @@ nc 10.0.0.10 22
 SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.1
 ```
 
-# Security Considerations
+## Security Considerations
 
 I like to start off by thinking about the attack surface. The first part is the service itself: is the service vulnerable? OpenSSH is extremely important and widely used - it is unlikely (but not impossible) that an up-to-date version of OpenSSH is going to have a glaring flaw that will be exploited. Instead, it is almost definitely going to be the configuration that will leave vulnerabilities.
 
