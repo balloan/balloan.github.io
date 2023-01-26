@@ -1,19 +1,17 @@
 ---
 layout: default
-title: SSH - Overview & Initial Install
+title: SSH Part 1
 parent: Projects
 nav_order: 2
 ---
 
-# Overview
+# SSH - Overview & Initial Install
 
 I’m going to begin with a Nmap scan of the Ubuntu server, just so we can compare the changes throughout the process of installing and configuring SSH.
 
 ![Initial Nmap Scan](../assets/images/ubuntuproject/4.png)
 
 As expected, all ports are closed as there are currently no services running on the Ubuntu server.
-
-# SSH - Overview
 
 Before diving into configuration, I think it’s important to consider (at a high level), what SSH is, and how it works. From there we’ll be able to consider the possible ways it can be attacked, and more importantly, defended.
 
