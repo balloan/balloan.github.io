@@ -10,7 +10,7 @@ nav_order: 2
 
 I’m going to begin with a Nmap scan of the Ubuntu server, just so we can compare the changes throughout the process of installing and configuring SSH.
 
-![Initial Nmap Scan](../../assets/images/ubuntuproject/4.png)
+![Initial Nmap Scan](../assets/images/ubuntuproject/4.png)
 
 As expected, all ports are closed as there are currently no services running on the Ubuntu server.
 
