@@ -6,7 +6,7 @@ grand_parent: Projects
 nav_order: 3
 ---
 
-# Attacking SSH
+# Attacking and Hardening SSH
 
 I’ll start by attacking the default configuration of this server by performing a dictionary attack against the password of the user `victim` on the Ubuntu server by using the tool Hydra.
 
@@ -35,7 +35,7 @@ The password `Micr0s0ft2022!` is 14 characters long, with a mix of uppercase, lo
 It's important to note that there are *many* tools out there to generate password lists. You can use hashcat, as I did here, tools such as CUPP (Common User Passwords Profiler), Mentalist and more. It's extremely easy to make long lists that add various levels of complexity to a password, appending common numbers to the end, etc. Truly random passwords are very difficult to guess. Passwords that are based upon words that can be linked to an individual (company name, spouse name, pet name, sports teams, anything posted about frequently on social media) are significantly more vulnerable, even if it's a seemingly strong password.
 
 * * *
-# Hardening SSH
+## Hardening SSH
 
 The above attack only works if I'm allowed to attempt to authenticate as many times as I like - let's fix that.
 
@@ -73,3 +73,44 @@ Let’s confirm it’s working, and is protecting our SSH server. By default, it
 ![Hydra Attack Blocked](../../assets/images/ubuntuproject/10.png)
 
 As you can see, it successfully blocked my connection after a few failed login attempts. This alone would make bruteforcing the service substantially more time consuming, and a much less appealing target.
+
+* * *
+
+## Configuring SSH - Public Key Authentication
+
+Password based authentication is less secure than using keys. It’s possible to guess a password - guessing a key isn’t really viable. In addition,  if we want we can encrypt the private key with a passphrase so it’s required every time we authenticate with the key - this adds another layer of security.
+
+It’s relatively simple to configure public key authentication.
+
+First, we generate a public and private key pair.  Next, we will need to add the public key to the `/home/<user>/.ssh/authorized_hosts` file on the server (creating the directory and file if it doesn’t exist), and keep our private key secure on our client.
+
+That’s it; we’ll be able to authenticate via public keys afterwards.
+
+Note: This example will overwrite the existing contents of the `authorized_keys` file. Append the public key to the end of the existing file to avoid erasing existing allowed keys.
+
+```bash
+ssh-keygen -b 4096   
+scp id_rsa.pub balloan@10.0.0.10:/home/victim/.ssh/authorized_keys
+```
+
+![Public Key Authentication](../../assets/images/ubuntuproject/11.png)
+
+We’re now able to SSH into the server using our private key `id_rsa` instead of a password. It’s important to note that password authentication is still enabled - let’s disable it and only allow authentication to the server via public keys. 
+
+We might as well disable allowing EmptyPasswords to authenticate here as well - it won’t affect public key authentication, but if we had a user account with an empty password for some reason, this blocks it.
+
+```bash
+sudo vim /etc/ssh/sshd_config
+
+# To disable tunneled clear text passwords, change to no here!
+PasswordAuthentication no  
+PermitEmptyPasswords no
+```
+
+Next, we need to restart the SSH service, and we should be good to go: `sudo systemctl restart sshd`
+
+Let’s verify that the server will no longer allow me to connect with a password. I temporarily moved my `id_rsa` on my Kali machine so it wouldn’t default to using my private key to authenticate.
+
+![Permission Denied](../../assets/images/ubuntuproject/12.png)
+
+![Nmap Scan](../../assets/images/ubuntuproject/13.png)
