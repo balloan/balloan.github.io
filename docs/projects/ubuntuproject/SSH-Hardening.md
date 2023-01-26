@@ -78,7 +78,7 @@ As you can see, it successfully blocked my connection after a few failed login a
 
 ## Configuring SSH - Public Key Authentication
 
-Password based authentication is less secure than using keys. It’s possible to guess a password - guessing a key isn’t really viable. In addition,  if we want we can encrypt the private key with a passphrase so it’s required every time we authenticate with the key - this adds another layer of security.
+Password based authentication is less secure than using keys. It’s possible to guess a password - guessing a key isn’t really viable. In addition, we can encrypt the private key with a passphrase so it’s required every time we authenticate with the key - this adds another layer of security.
 
 It’s relatively simple to configure public key authentication.
 
@@ -211,7 +211,46 @@ wc -l usernames.txt
 
 sed ':a;N;$!ba;s/\n/,/g' usernames.txt | cat
 
-Admin,CISINFO,ONTUSER,aaron,adam,adi,aditya,adm,admin,admin1,admin2,adminweb,adsl,alan,alarm,albert123,alberto,alcatel,alexandre,alfresco,ali,allan,alpha,alumno,amir,amit,ana,andrew,andy,angel,angelica,anil,anjana,ansibleuser,anto,antoine,antonio,apacher,api,appldev,applprod,arkserver,asap,asc,auto,avi,backend,bdos,benjamin,bhx,bigdata,bigipuser3,billy,blog,bluesky,bml,bni,bob,boss,bot,bot2,bpuser,brian,brother,build,bwadmin,cam,camera,camtest,carlos,cas,cashier,cc,centos,cgpexpert,chengfang,chenyd,cipensiamonoicasa,cloud,common,compras,confluence,consulta,control,copia,copias,core,cpd,cqj,cs,csgosrv,cvsuser,cxy,czc,danhui,daniela,danilo,data,david,db_user,dd,ddos,debianuser,debug,default,demo1,deploy,desarrollo,dev,dev1,devopsuser,diego,disk,divya,django,dkhcdndn,dlxuser,dmdba,dms,dnsekakf2$$,docker,dockeradmin,dolphinscheduler,dong,dynamic,ec2-user,edi,eduardo,edwin,ela,els,elsearch,emcali,ems,enrique,esunny,eugene,export,factura,fastuser,felix,fengchao,finn,fiscal,foobar,formation,foundry,frappe,front,ftp,ftp1,ftp_admin,ftp_guest,ftp_test,ftpadmin,fv,gandalf,git,gitlab-runner,gituser,gmod,grid,guest,guest-pkxhox,gustavo,hadmin,hadoop,haohao,harry,hejc,hello,hh,hive,hj,hl,home,hotline,hs,hsi,httpadmin,huawei,huzhengjian,hz,hzk,igor,import,incoming,infa,informix,inspir,int,iwan,jack,jacob,jake,jarservice,jay,jboss,jenkins,jeremy,jimmy,jon,jonathan,jordan,jorge,joyce,juan,julien,jupyter,jxzhang,k,kadmin,kafka,kali,kbe,keh,kevin,khs,kibana,king,kms,knock,koha,kuba,kube,l4d2server,lab,leonardo,libuuid,lighthouse,lisa,liu,liubin,liumeina,liuyuyao,logic,lokesh,lorenz,louis,lty,lukas,lwq,lxc,lyh,lzn,m,machao,magento,maint,maintain,manager,mapr,mapred,maria,mark,marta,mashuai,matt,max,mc,mcserver,media,miguel,miles,miner,minera,miniconda,minikube,mk,mm,money,mongo,mongod,mongodb,moodle,mos,nas,nathan,new,nginxuser,nicola,notes,novo,ocean,one,opc,openbravo,openhabian,openstack,operador,operator,ora,oracle,oracle32,oraprod,osboxes,oscar,oscommerce,ossadm,otrs,owncloud,p1,pacs,parisa,pasha,patrice,patricia,patrick,paulo,pedro,peertube,pentaho,phil,phion,pi,pos,postgre,postgres,pp,ppp,princess,printer,prova,prueba,ps,public,python,pzserver,qianqian,quan,query,r,ram,rancher,reach,red,rich,rob,robert,roberto,rodrigo,rpm,rundeck,runner,rust,s1,sFTPUser,sa,sac,safa,sales,sales1,sam,sama,samba,sambauser,sambit,sample,samuel,sandra,sara,scj,sergey,sftp,share,shiny,shoutcast,site,slave,sonar,sonarqube,sonarr,songsong,soporte,sp,spark,speech-dispatcher,spider,spy,starbound,steam,stream,student3,student5,students,sun,super,support,sybase,sysbio,szy,tata,teacher,teamspeak3,tele,telnet,tempuser,test,test01,test6,testadmin,thomas,ti,tibero,tidb,tigergraph,tim,tiptop,titan,tmax,tomas,tommy,toor,torrent,tq,transfer,transmission,ts3,ts3srv,tunnel,two,ubnt,ubuntu,uftp,ukschool,update,upload,user,user1,user11,user3,user4,userftp,username,usr,usuario2,utente,uvr,vadmin,vagrant,venkat,ventas,vhserver,victor,vijay,vincent,vishnu,vitaly,vlad,vmail,vmware,vpn,vpnadmin,vps,vyatta,walter,wanghan,wasadm,webadmin,webdev,weblogic,webmaster01,webuser,wenxian,wh,wildfly,wk,wocloud,work,wsuser,www,wyc,x,xh,xiaoshu,xj,xtest,xy,yaozw,yjq,yuan,zd,zengyuanqi,zhang,zhc,zjq,zk,zl,zr,zsw,zte,zyfwp
+Admin,CISINFO,ONTUSER,aaron,adam,adi,aditya,adm,admin,admin1,admin2,adminweb,
+adsl,alan,alarm,albert123,alberto,alcatel,alexandre,alfresco,ali,allan,alpha,
+alumno,amir,amit,ana,andrew,andy,angel,angelica,anil,anjana,ansibleuser,anto,
+antoine,antonio,apacher,api,appldev,applprod,arkserver,asap,asc,auto,avi,backend,
+bdos,benjamin,bhx,bigdata,bigipuser3,billy,blog,bluesky,bml,bni,bob,boss,bot,
+bot2,bpuser,brian,brother,build,bwadmin,cam,camera,camtest,carlos,cas,cashier,
+cc,centos,cgpexpert,chengfang,chenyd,cipensiamonoicasa,cloud,common,compras,
+confluence,consulta,control,copia,copias,core,cpd,cqj,cs,csgosrv,cvsuser,cxy,
+czc,danhui,daniela,danilo,data,david,db_user,dd,ddos,debianuser,debug,default,
+demo1,deploy,desarrollo,dev,dev1,devopsuser,diego,disk,divya,django,dkhcdndn,
+dlxuser,dmdba,dms,dnsekakf2$$,docker,dockeradmin,dolphinscheduler,dong,dynamic,
+ec2-user,edi,eduardo,edwin,ela,els,elsearch,emcali,ems,enrique,esunny,eugene,
+export,factura,fastuser,felix,fengchao,finn,fiscal,foobar,formation,foundry,
+frappe,front,ftp,ftp1,ftp_admin,ftp_guest,ftp_test,ftpadmin,fv,gandalf,git,
+gitlab-runner,gituser,gmod,grid,guest,guest-pkxhox,gustavo,hadmin,hadoop,haohao,
+harry,hejc,hello,hh,hive,hj,hl,home,hotline,hs,hsi,httpadmin,huawei,huzhengjian,
+hz,hzk,igor,import,incoming,infa,informix,inspir,int,iwan,jack,jacob,jake,
+jarservice,jay,jboss,jenkins,jeremy,jimmy,jon,jonathan,jordan,jorge,joyce,juan,
+julien,jupyter,jxzhang,k,kadmin,kafka,kali,kbe,keh,kevin,khs,kibana,king,kms,
+knock,koha,kuba,kube,l4d2server,lab,leonardo,libuuid,lighthouse,lisa,liu,liubin,
+liumeina,liuyuyao,logic,lokesh,lorenz,louis,lty,lukas,lwq,lxc,lyh,lzn,m,machao,
+magento,maint,maintain,manager,mapr,mapred,maria,mark,marta,mashuai,matt,max,mc,
+mcserver,media,miguel,miles,miner,minera,miniconda,minikube,mk,mm,money,mongo,
+mongod,mongodb,moodle,mos,nas,nathan,new,nginxuser,nicola,notes,novo,ocean,one,
+opc,openbravo,openhabian,openstack,operador,operator,ora,oracle,oracle32,oraprod,
+osboxes,oscar,oscommerce,ossadm,otrs,owncloud,p1,pacs,parisa,pasha,patrice,patricia,
+patrick,paulo,pedro,peertube,pentaho,phil,phion,pi,pos,postgre,postgres,pp,ppp,
+princess,printer,prova,prueba,ps,public,python,pzserver,qianqian,quan,query,r,ram,
+rancher,reach,red,rich,rob,robert,roberto,rodrigo,rpm,rundeck,runner,rust,s1,sFTPUser,
+sa,sac,safa,sales,sales1,sam,sama,samba,sambauser,sambit,sample,samuel,sandra,sara,scj,
+sergey,sftp,share,shiny,shoutcast,site,slave,sonar,sonarqube,sonarr,songsong,soporte,sp,
+spark,speech-dispatcher,spider,spy,starbound,steam,stream,student3,student5,students,sun,
+super,support,sybase,sysbio,szy,tata,teacher,teamspeak3,tele,telnet,tempuser,test,test01,
+test6,testadmin,thomas,ti,tibero,tidb,tigergraph,tim,tiptop,titan,tmax,tomas,tommy,toor,
+torrent,tq,transfer,transmission,ts3,ts3srv,tunnel,two,ubnt,ubuntu,uftp,ukschool,update,
+upload,user,user1,user11,user3,user4,userftp,username,usr,usuario2,utente,uvr,vadmin,
+vagrant,venkat,ventas,vhserver,victor,vijay,vincent,vishnu,vitaly,vlad,vmail,vmware,vpn,
+vpnadmin,vps,vyatta,walter,wanghan,wasadm,webadmin,webdev,weblogic,webmaster01,webuser,
+wenxian,wh,wildfly,wk,wocloud,work,wsuser,www,wyc,x,xh,xiaoshu,xj,xtest,xy,yaozw,yjq,yuan,
+zd,zengyuanqi,zhang,zhc,zjq,zk,zl,zr,zsw,zte,zyfwp
 
 ```
 
