@@ -10,7 +10,7 @@ nav_order: 2
 
 I’m going to begin with a Nmap scan of the Ubuntu server, just so we can compare the changes throughout the process of installing and configuring SSH.
 
-![Initial Nmap Scan](../../assets/images/ubuntuproject/4.png)
+![Initial Nmap Scan](../../../assets/images/ubuntuproject/4.png)
 
 As expected, all ports are closed as there are currently no services running on the Ubuntu server.
 
@@ -48,7 +48,7 @@ LISTEN           0                128                                 [::]:22   
 
 The SSH server is now running, and the server is listening on port 22.
 
-![Logging in via SSH](../assets/images/ubuntuproject/5.png)
+![Logging in via SSH](../../assets/images/ubuntuproject/5.png)
 
 And, as expected, we were able to connect to the server via SSH. 
 
@@ -58,13 +58,13 @@ The default settings of a newly installed SSH server allow us to authenticate wi
 
 First, we’ll run a Nmap scan on the server and see what information is newly visible to us now that we have a service running.
 
-![Nmap Scan](../assets/images/ubuntuproject/6.png)
+![Nmap Scan](../../assets/images/ubuntuproject/6.png)
 
 As expected, we find that port 22 is open with the SSH service running. Nmap is able to identify the version of the SSH server, as well as a rough idea of the underlying operating system through its fingerprinting techniques.
 
 We can also check the allowed authentication methods with Nmap.
 
-![Nmap Scan](../assets/images/ubuntuproject/7.png)
+![Nmap Scan](../../assets/images/ubuntuproject/7.png)
 
 We can also use netcat to interact with port 22 on the Ubuntu server and grab the banner.
 
