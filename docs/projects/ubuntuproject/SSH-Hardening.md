@@ -205,10 +205,8 @@ I was curious about all of the usernames that were regularly targeted, so I figu
 
 ```
 grep 'sshd.*Invalid user' /var/log/auth.log | cut -d ' ' -f 8 | sort -u > usernames.txt
-
 wc -l usernames.txt 
 492 usernames.txt
-
 sed ':a;N;$!ba;s/\n/,/g' usernames.txt | cat
 
 Admin,CISINFO,ONTUSER,aaron,adam,adi,aditya,adm,admin,admin1,admin2,adminweb,
