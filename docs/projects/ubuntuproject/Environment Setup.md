@@ -6,7 +6,7 @@ grand_parent: Projects
 nav_order: 1
 ---
 
-# Environmment Setup
+# Environment Setup
 First, I configured the two machines that I'll be using for this project in VMWare - the Ubuntu server, and a Kali VM to perform the attacks. Both machines are fully up to date (as of the time of this writing)
 
 ![Hello World!](../../assets/images/ubuntuproject/1.png)
