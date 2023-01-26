@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Ubuntu Project Overview
+title: Ubuntu Project
 parent: Projects
 nav_order: 1
 has_children: true
