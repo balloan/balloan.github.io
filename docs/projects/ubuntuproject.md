@@ -12,7 +12,6 @@ The plan for this project is to install, configure and secure a Ubuntu 22.04 LTS
 I'll then perform common attacks against these services with another machine on my network in order to validate security controls and configuration. In addition, I'll analyze the associated log files (and potentially packet captures as well).
 
 * * * 
-
 Let's get started!
 
 
@@ -27,5 +26,7 @@ I configured the Ubuntu server with a static IP of 10.0.0.10/24. The Kali VM and
 ![Ping](../assets/images/ubuntuproject/3.png)
 
 The environment seems to be working properly and the machines are able to communicate. 
+
+For the purposes of this project, I’m going to create a new user “victim” on the Ubuntu server, which I’ll use in several of the exercises.
 
 My next steps will be to configure, secure, and potentially attack SSH!
