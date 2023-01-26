@@ -23,3 +23,27 @@ The client needs to authenticate to the server to connect - the most common meth
 OpenSSH also supports a variety of other methods (ie Kerberos integration, challenge/response for PAM) but for the sake of simplicity I won’t be covering those.
 
 Right away, it’s extremely apparent that this service is valuable to attackers. Gaining access through SSH is gaining a shell, allowing a great deal of access in the system. It’s a service that allows direct access, and it can be publicly exposed to the internet as a whole; we need to ensure it is secure.
+
+# Installation
+
+We'll begin by installing the SSH service.
+
+```
+sudo apt install openssh-server
+
+systemctl status ssh
+ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sun 2023-01-15 01:54:17 UTC; 1min 19s ago
+```
+
+```
+ss -tnlp
+
+State            Recv-Q           Send-Q                     Local Address:Port                       Peer Address:Port           Process           
+LISTEN           0                128                              0.0.0.0:22                              0.0.0.0:*                                
+LISTEN           0                4096                       127.0.0.53%lo:53                              0.0.0.0:*                                
+LISTEN           0                128                                 [::]:22                                 [::]:*                          
+```
+
+The SSH server is now running, and the server is listening on port 22.
