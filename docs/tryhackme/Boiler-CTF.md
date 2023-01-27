@@ -210,6 +210,7 @@ gobuster dir -u $IP/joomla -w /usr/share/wordlists/dirbuster/directory-list-2.3-
 Lots of results; let's break this down.
 
 `http://10.10.87.42/joomla/installation/` 
+
 PLEASE REMEMBER TO COMPLETELY REMOVE THE INSTALLATION FOLDER.
 You will not be able to proceed beyond this point until the "installation" folder has been removed. This is a security feature of Joomla!
 
@@ -218,7 +219,8 @@ We like security features. The installation folder has not been removed - I'll d
 `http://10.10.87.42/joomla/administrator/`  
 Admin login page -> If I find credentials somewhere, this looks promising.
 
-`http://10.10.87.42/joomla/build/jenkins/` contains `unit-tests.sh` & `docker-compose.yml` 
+`http://10.10.87.42/joomla/build/jenkins/` 
+contains `unit-tests.sh` & `docker-compose.yml` 
 
 ```
 cat unit-tests.sh
