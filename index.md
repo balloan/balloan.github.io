@@ -1,5 +1,5 @@
-Here you can say lots of fun things about your site.
+A collection of projects focusing on Python, networking, and security.
 
-Maybe say a some things about yourself.
+# Index
 
-Or maybe what you plan to blog about.
+As I begin to add more projects and posts, I'll populate this section in a logical way. Until then, it will be mildly chaotic.
