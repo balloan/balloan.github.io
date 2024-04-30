@@ -1,5 +1,5 @@
-A collection of projects focusing on Python, networking, and security.
+A collection of various things relating to programming, cloud, security, and whateever I find interesting at the time.
 
 # Index
 
-As I begin to add more projects and posts, I'll populate this section in a logical way. Until then, it will be mildly chaotic.
+I will create an index here eventually when there is more content, to make this readable.
